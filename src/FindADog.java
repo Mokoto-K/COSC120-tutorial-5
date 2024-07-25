@@ -28,13 +28,14 @@ public class FindADog {
         allDogs = loadDogs();
 
         JOptionPane.showMessageDialog(null, "Welcome to Pinkman's Pets Dog Finder!\n\tTo start, click OK.", appName, JOptionPane.QUESTION_MESSAGE, icon);
-        Dog dogCriteria = getUserCriteria();
+        DreamDog dogCriteria = getUserCriteria();
         List<Dog> potentialMatches = allDogs.findMatch(dogCriteria);
-        if(potentialMatches.size()>0){
+        if(!potentialMatches.isEmpty()){
             Map<String,Dog> options = new HashMap<>();
-            StringBuilder infoToShow = new StringBuilder("Matches found!! The following dogs meet your criteria: \n");
+            StringBuilder infoToShow = new StringBuilder("Matches found!! The following dogs meet your criteria: \n\n");
             for (Dog potentialMatch : potentialMatches) {
-                infoToShow.append(potentialMatch.getName()).append(" (").append(potentialMatch.getMicrochipNumber()).append(") is a ").append(potentialMatch.getAge()).append(" year old ").append(potentialMatch.getSex()).append(" ").append(potentialMatch.getBreed()).append(". De-sexed: ").append(potentialMatch.isDeSexed()).append("\n");
+                infoToShow.append(potentialMatch.dogDescription());
+
                 options.put(potentialMatch.getName() + " (" + potentialMatch.getMicrochipNumber() + ")", potentialMatch);
             }
             String adopt = (String) JOptionPane.showInputDialog(null,infoToShow+"\n\nPlease select which (if any) dog you'd like to adopt:","Pinkman's Pets Dog Finder", JOptionPane.QUESTION_MESSAGE,null,options.keySet().toArray(), "");
@@ -114,9 +115,10 @@ public class FindADog {
 
     /**
      * generates JOptionPanes requesting user input for dog breed, sex, de-sexed status and age
+     *
      * @return a Dog object representing the user's desired dog criteria
      */
-    private static Dog getUserCriteria(){
+    private static DreamDog getUserCriteria(){
         String breed  = (String) JOptionPane.showInputDialog(null,"Please select your preferred breed.",appName, JOptionPane.QUESTION_MESSAGE,icon,allDogs.getAllBreeds().toArray(), "");
         if(breed==null) System.exit(0);
 
@@ -144,10 +146,13 @@ public class FindADog {
             }
             if(maxAge<minAge) JOptionPane.showMessageDialog(null,"Max age must be >= min age.");
         }
-        Dog dogCriteria = new Dog("", 0, -1, breed, sex, deSexed);
-        dogCriteria.setMinAge(minAge);
-        dogCriteria.setMaxAge(maxAge);
-        return dogCriteria;
+//        Dog dogCriteria = new Dog("", 0, -1, breed, sex, deSexed);
+//        dogCriteria.setMinAge(minAge);
+//        dogCriteria.setMaxAge(maxAge);
+
+        PureBred pureBred = (PureBred) JOptionPane.showInputDialog(null, "You want PUREBLOOD or not!?", null,3,null, PureBred.values(), PureBred.NA);
+
+        return new DreamDog(minAge, maxAge, breed, sex, deSexed, pureBred);
     }
 
     /**
@@ -190,7 +195,17 @@ public class FindADog {
             }
             String breed = elements[5].toLowerCase();
 
-            Dog dog = new Dog(name, microchipNumber,age, breed, sex, deSexed);
+            String adoptionFee = "0";
+            try {
+                adoptionFee = "$"+elements[7];
+            }
+            catch (NumberFormatException e) {
+                System.out.println("I wouldnt write a program with 8 back to back try catches for this.... just saying.");
+            }
+
+            PureBred pureBred = PureBred.valueOf(elements[6]);
+            DreamDog dreamDog = new DreamDog(0,0,breed,sex, deSexed, pureBred);
+            Dog dog = new Dog(name, microchipNumber,age, adoptionFee, dreamDog);
             allDogs.addDog(dog);
         }
         return allDogs;
