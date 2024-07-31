@@ -26,13 +26,13 @@ public class FindADog {
         allDogs = loadDogs();
 
         JOptionPane.showMessageDialog(null, "Welcome to Pinkman's Pets Dog Finder!\n\tTo start, click OK.", appName, JOptionPane.QUESTION_MESSAGE, icon);
-        Dog dogCriteria = getUserCriteria();
+        DreamDog dogCriteria = getUserCriteria();
         List<Dog> potentialMatches = allDogs.findMatch(dogCriteria);
         if(potentialMatches.size()>0){
             Map<String,Dog> options = new HashMap<>();
             StringBuilder infoToShow = new StringBuilder("Matches found!! The following dogs meet your criteria: \n");
             for (Dog potentialMatch : potentialMatches) {
-                infoToShow.append(potentialMatch.getName()).append(" (").append(potentialMatch.getMicrochipNumber()).append(") is a ").append(potentialMatch.getAge()).append(" year old ").append(potentialMatch.getSex()).append(" ").append(potentialMatch.getBreed()).append(". De-sexed: ").append(potentialMatch.isDeSexed()).append("\n");
+                infoToShow.append(potentialMatch.getName()).append(" (").append(potentialMatch.getMicrochipNumber()).append(") is a ").append(potentialMatch.getAge()).append(" year old ").append(potentialMatch.getDreamdog().getSex()).append(" ").append(potentialMatch.getDreamdog().getBreed()).append(". De-sexed: ").append(potentialMatch.getDreamdog().getDeSexed()).append("\n");
                 options.put(potentialMatch.getName() + " (" + potentialMatch.getMicrochipNumber() + ")", potentialMatch);
             }
             String adopt = (String) JOptionPane.showInputDialog(null,infoToShow+"\n\nPlease select which (if any) dog you'd like to adopt:","Pinkman's Pets Dog Finder", JOptionPane.QUESTION_MESSAGE,null,options.keySet().toArray(), "");
@@ -89,43 +89,18 @@ public class FindADog {
             }
             String breed = elements[5].toLowerCase();
 
-            Dog dog = new Dog(name, microchipNumber,age, breed, sex, deSexed);
+            Dog dog = new Dog(name, microchipNumber, age, breed, sex, deSexed);
             allDogs.addDog(dog);
         }
         return allDogs;
     }
 
     /**
-     * method to get user to input name, ph num and email, with appropriate input validation
-     * @return a Person object representing the user of the program
-     */
-    private static Person getUserDetails(){
-        String name;
-        do {
-            name = JOptionPane.showInputDialog(null, "Please enter your full name.", appName, JOptionPane.QUESTION_MESSAGE);
-            if(name==null) System.exit(0);
-        } while(!isValidFullName(name));
-
-        String phoneNumber;
-        do{
-            phoneNumber = JOptionPane.showInputDialog("Please enter your phone number (10-digit number in the format 0412345678): ");
-            if(phoneNumber==null) System.exit(0);}
-        while(!isValidPhoneNumber(phoneNumber));
-
-        String email;
-        do {
-            email = JOptionPane.showInputDialog(null, "Please enter your email address.", appName, JOptionPane.QUESTION_MESSAGE);
-            if (email == null) System.exit(0);
-        }while(!isValidEmail(email));
-
-        return new Person(name, phoneNumber, email);
-    }
-
-    /**
      * generates JOptionPanes requesting user input for dog breed, sex, de-sexed status and age
+     *
      * @return a Dog object representing the user's desired dog criteria
      */
-    private static Dog getUserCriteria(){
+    private static DreamDog getUserCriteria(){
         String breed  = (String) JOptionPane.showInputDialog(null,"Please select your preferred breed.",appName, JOptionPane.QUESTION_MESSAGE,icon,allDogs.getAllBreeds().toArray(), "");
         if(breed==null) System.exit(0);
 
@@ -153,10 +128,37 @@ public class FindADog {
             }
             if(maxAge<minAge) JOptionPane.showMessageDialog(null,"Max age must be >= min age.");
         }
-        Dog dogCriteria = new Dog("", 0, -1, breed, sex, deSexed);
-        dogCriteria.setMinAge(minAge);
-        dogCriteria.setMaxAge(maxAge);
-        return dogCriteria;
+//        Dog dogCriteria = new Dog("", 0, -1, breed, sex, deSexed);
+//        dogCriteria.setMinAge(minAge);
+//        dogCriteria.setMaxAge(maxAge);
+        DreamDog dreamDog = new DreamDog(breed, sex, deSexed, 0, 0);
+        return dreamDog;
+    }
+
+    /**
+     * method to get user to input name, ph num and email, with appropriate input validation
+     * @return a Person object representing the user of the program
+     */
+    private static Person getUserDetails(){
+        String name;
+        do {
+            name = JOptionPane.showInputDialog(null, "Please enter your full name.", appName, JOptionPane.QUESTION_MESSAGE);
+            if(name==null) System.exit(0);
+        } while(!isValidFullName(name));
+
+        String phoneNumber;
+        do{
+            phoneNumber = JOptionPane.showInputDialog("Please enter your phone number (10-digit number in the format 0412345678): ");
+            if(phoneNumber==null) System.exit(0);}
+        while(!isValidPhoneNumber(phoneNumber));
+
+        String email;
+        do {
+            email = JOptionPane.showInputDialog(null, "Please enter your email address.", appName, JOptionPane.QUESTION_MESSAGE);
+            if (email == null) System.exit(0);
+        }while(!isValidEmail(email));
+
+        return new Person(name, phoneNumber, email);
     }
 
     /**

@@ -4,11 +4,12 @@ public class Dog {
     private final String name;
     private final long microchipNumber;
     private final int age;
-    private final String breed;
-    private final Sex sex;
-    private final DeSexed deSexed;
-    private int minAge;
-    private int maxAge;
+    private final DreamDog dreamdog;
+//    private final String breed;
+//    private final Sex sex;
+//    private final DeSexed deSexed;
+//    private int minAge;
+//    private int maxAge;
 
     /**
      * constructor to create a Dog object
@@ -23,9 +24,11 @@ public class Dog {
         this.name=name;
         this.microchipNumber=microchipNumber;
         this.age=age;
-        this.breed=breed;
-        this.sex=sex;
-        this.deSexed=deSexed;
+        this.dreamdog = new DreamDog(breed, sex, deSexed, 0, 0);
+//        this.dreamDog(breed, sex, deSexed, 0, 0);
+//        this.breed=breed;
+//        this.sex=sex;
+//        this.deSexed=deSexed;
     }
 
     //getters
@@ -50,45 +53,47 @@ public class Dog {
         return age;
     }
 
-    /**
-     * @return the dog's breed
-     */
-    public String getBreed() {
-        return breed;
-    }
+    public DreamDog getDreamdog() {return dreamdog; }
 
-    /**
-     * @return the dog's sex (male or female)
-     */
-    public Sex getSex() { return sex;}
-
-    /**
-     * @return the dog's de-sexed status
-     */
-    public DeSexed isDeSexed() { return deSexed; }
-
-    /**
-     * @param maxAge the max age a user is willing to adopt
-     */
-    public void setMaxAge(int maxAge) {
-        this.maxAge = maxAge;
-    }
-    /**
-     * @param minAge the min age a user is willing to adopt
-     */
-    public void setMinAge(int minAge) {
-        this.minAge = minAge;
-    }
-    /**
-     * @return a 'dream' dog's min age
-     */
-    public int getMinAge() {
-        return minAge;
-    }
-    /**
-     * @return a 'dream' dog's max age
-     */
-    public int getMaxAge() {
-        return maxAge;
-    }
+    //    /**
+//     * @return the dog's breed
+//     */
+//    public String getBreed() {
+//        return breed;
+//    }
+//
+//    /**
+//     * @return the dog's sex (male or female)
+//     */
+//    public Sex getSex() { return sex;}
+//
+//    /**
+//     * @return the dog's de-sexed status
+//     */
+//    public DeSexed isDeSexed() { return deSexed; }
+//
+//    /**
+//     * @param maxAge the max age a user is willing to adopt
+//     */
+//    public void setMaxAge(int maxAge) {
+//        this.maxAge = maxAge;
+//    }
+//    /**
+//     * @param minAge the min age a user is willing to adopt
+//     */
+//    public void setMinAge(int minAge) {
+//        this.minAge = minAge;
+//    }
+//    /**
+//     * @return a 'dream' dog's min age
+//     */
+//    public int getMinAge() {
+//        return minAge;
+//    }
+//    /**
+//     * @return a 'dream' dog's max age
+//     */
+//    public int getMaxAge() {
+//        return maxAge;
+//    }
 }
