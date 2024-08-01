@@ -5,6 +5,7 @@ public class Dog {
     private final long microchipNumber;
     private final int age;
     private final DreamDog dreamdog;
+    private final double adoptionFee;
 //    private final String breed;
 //    private final Sex sex;
 //    private final DeSexed deSexed;
@@ -20,11 +21,12 @@ public class Dog {
      * @param sex the dog's sex (male or female)
      * @param deSexed the dog's de-sexed status - true if de-sexed, false if not
      */
-    public Dog(String name, long microchipNumber, int age, String breed, Sex sex, DeSexed deSexed){
+    public Dog(String name, long microchipNumber, int age, double adoptionFee, DreamDog dreamDog){
         this.name=name;
         this.microchipNumber=microchipNumber;
         this.age=age;
-        this.dreamdog = new DreamDog(breed, sex, deSexed, 0, 0);
+        this.dreamdog = dreamDog;
+        this.adoptionFee = adoptionFee;
 //        this.dreamDog(breed, sex, deSexed, 0, 0);
 //        this.breed=breed;
 //        this.sex=sex;
@@ -54,6 +56,8 @@ public class Dog {
     }
 
     public DreamDog getDreamdog() {return dreamdog; }
+
+    public double getAdoptionFee() {return adoptionFee; }
 
     //    /**
 //     * @return the dog's breed
@@ -96,4 +100,11 @@ public class Dog {
 //    public int getMaxAge() {
 //        return maxAge;
 //    }
+
+    public StringBuilder getDogDescription() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getName()).append(" (").append(this.getMicrochipNumber()).append(") is a ").append(this.getAge()).
+                append(" year old ").append(this.dreamdog.getDreamDogDescription()).append(this.adoptionFee).append("\n\n");
+        return sb;
+    }
 }

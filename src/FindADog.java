@@ -12,7 +12,7 @@ public class FindADog {
 
     //fields
     private final static String appName = "Pinkman's Pets Dog Finder";
-    private final static String filePath = "./allDogs.txt";
+    private final static String filePath = "./allDogs-2.txt";
     private final static String iconPath = "./icon.jpg";
 
     private static final ImageIcon icon = new ImageIcon(iconPath);
@@ -30,9 +30,14 @@ public class FindADog {
         List<Dog> potentialMatches = allDogs.findMatch(dogCriteria);
         if(potentialMatches.size()>0){
             Map<String,Dog> options = new HashMap<>();
-            StringBuilder infoToShow = new StringBuilder("Matches found!! The following dogs meet your criteria: \n");
+            StringBuilder infoToShow = new StringBuilder("Matches found!! The following dogs meet your criteria: \n\n");
             for (Dog potentialMatch : potentialMatches) {
-                infoToShow.append(potentialMatch.getName()).append(" (").append(potentialMatch.getMicrochipNumber()).append(") is a ").append(potentialMatch.getAge()).append(" year old ").append(potentialMatch.getDreamdog().getSex()).append(" ").append(potentialMatch.getDreamdog().getBreed()).append(". De-sexed: ").append(potentialMatch.getDreamdog().getDeSexed()).append("\n");
+//                infoToShow.append(potentialMatch.getName()).append(" (").append(potentialMatch.getMicrochipNumber()).
+//                        append(") is a ").append(potentialMatch.getAge()).append(" year old ").
+//                        append(potentialMatch.getDreamdog().getSex()).append(" ").append(potentialMatch.getDreamdog().getBreed()).
+//                        append(". \n > De-sexed: ").append(potentialMatch.getDreamdog().getDeSexed()).append("\n").
+//                        append("> Adoption fee: ").append(potentialMatch.getAdoptionFee()).append("\n\n");
+                infoToShow.append(potentialMatch.getDogDescription());
                 options.put(potentialMatch.getName() + " (" + potentialMatch.getMicrochipNumber() + ")", potentialMatch);
             }
             String adopt = (String) JOptionPane.showInputDialog(null,infoToShow+"\n\nPlease select which (if any) dog you'd like to adopt:","Pinkman's Pets Dog Finder", JOptionPane.QUESTION_MESSAGE,null,options.keySet().toArray(), "");
@@ -89,7 +94,17 @@ public class FindADog {
             }
             String breed = elements[5].toLowerCase();
 
-            Dog dog = new Dog(name, microchipNumber, age, breed, sex, deSexed);
+            Purebred purebred = Purebred.valueOf(elements[6].toUpperCase());
+
+            double adoptionFee = 0;
+            try{
+                adoptionFee = Double.parseDouble(elements[7]);
+            }catch (NumberFormatException n){
+                System.out.println("Error in file. Adoption Fee could not be parsed for dog on line "+(i+1)+". Terminating. \nError message: "+n.getMessage());
+                System.exit(0);
+            }
+            DreamDog dreamDog = new DreamDog(breed, sex, deSexed, purebred, 0, 0);
+            Dog dog = new Dog(name, microchipNumber, age, adoptionFee, dreamDog);
             allDogs.addDog(dog);
         }
         return allDogs;
@@ -109,6 +124,9 @@ public class FindADog {
 
         DeSexed deSexed = (DeSexed) JOptionPane.showInputDialog(null,"Would you like your dog to be de-sexed or not?",appName, JOptionPane.QUESTION_MESSAGE,icon,DeSexed.values(),DeSexed.YES);
         if(deSexed==null) System.exit(0);
+
+        Purebred purebred = (Purebred) JOptionPane.showInputDialog(null,"Would you like your dog to be Purebred or not?",appName, JOptionPane.QUESTION_MESSAGE,icon,Purebred.values(),Purebred.YES);
+        if(purebred==null) System.exit(0);
 
         int minAge = -1, maxAge = -1;
         while(minAge==-1) {
@@ -131,7 +149,7 @@ public class FindADog {
 //        Dog dogCriteria = new Dog("", 0, -1, breed, sex, deSexed);
 //        dogCriteria.setMinAge(minAge);
 //        dogCriteria.setMaxAge(maxAge);
-        DreamDog dreamDog = new DreamDog(breed, sex, deSexed, 0, 0);
+        DreamDog dreamDog = new DreamDog(breed, sex, deSexed, purebred, minAge, maxAge);
         return dreamDog;
     }
 
